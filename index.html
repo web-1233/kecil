@@ -417,9 +417,9 @@
 
         <!-- 9. FINAL MESSAGE -->
         <div id="success-message" class="hidden" style="text-align: center; padding: 40px 20px;">
-            <h2>Makasih udah isi semuanya 🤍</h2>
+            <h2>Makasih udah isi semuanya sayangg/h2>
             <p style="margin-top: 10px;">Jangan lupa chat aku biar makin akrab!</p>
-            <button class="btn" onclick="window.open('https://wa.me/628131649362', '_blank')" style="margin-top: 20px; width: auto; padding: 12px 40px;">Chat Aku</button>
+<button class="btn" onclick="window.open('https://wa.me/'+WA_NUMBER, '_blank')" style="margin-top: 20px; width: auto; padding: 12px 40px;">Chat Aku</button>
         </div>
         
         <div style="height: 50px;"></div>
@@ -497,7 +497,7 @@
             }
             
             const msg = `*Jawaban Baru Masuk! 💌*\n\n*${category}*\nQ: ${question}\nA: ${answer}`;
-            const url = `https://wa.me/$628131649362?text=${encodeURIComponent(msg)}`;
+const url = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
             
             // Open WA in new tab
             window.open(url, '_blank');
@@ -794,7 +794,7 @@
             msg += `*Game Score:* ${state.gameScore}\n`;
             
             const encodedMsg = encodeURIComponent(msg);
-            const url = `https://wa.me/628131649362?text=${encodedMsg}`;
+const url = `https://wa.me/${WA_NUMBER}?text=${encodedMsg}`;
             
             document.getElementById('final-section').classList.add('hidden');
             document.getElementById('success-message').classList.remove('hidden');
