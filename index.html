@@ -1,0 +1,814 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pengen tau aja jawaban kamu?</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-color: #FFF9F5;
+            --card-bg: #FFFFFF;
+            --primary: #FFB7B2;
+            --primary-dark: #FF9E99;
+            --accent: #FFDAC1;
+            --text-main: #5D5D5D;
+            --text-light: #888888;
+            --shadow: 0 8px 24px rgba(149, 157, 165, 0.1);
+            --radius: 16px;
+            --font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 80px;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hidden { display: none !important; }
+        
+        h1, h2, h3 {
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        p { margin-bottom: 15px; }
+
+        .btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(255, 183, 178, 0.4);
+            width: 100%;
+            text-align: center;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:active { transform: scale(0.98); }
+        .btn:hover { background-color: var(--primary-dark); }
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: none;
+        }
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Tombol Kirim Cepat */
+        .btn-send-mini {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 0 15px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            white-space: nowrap;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        /* --- HEADER --- */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        header h1 { font-size: 1.8rem; }
+        header .subtitle { font-size: 1rem; color: var(--text-light); margin-top: 5px; }
+
+        /* --- SECTIONS GENERAL --- */
+        section {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--bg-color);
+            color: #555;
+        }
+
+        /* --- ABOUT ME WIZARD --- */
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            height: 6px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .question-card { min-height: 200px; display: flex; flex-direction: column; justify-content: center; }
+        .question-text { font-size: 1.1rem; font-weight: 500; margin-bottom: 20px; text-align: center; }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #eee;
+            background-color: #FAFAFA;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            resize: none;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        textarea:focus, input[type="text"]:focus { border-color: var(--primary); }
+
+        .wizard-controls { display: flex; gap: 10px; }
+
+        /* --- ABOUT US LIST --- */
+        .us-questions-list > div {
+            margin-bottom: 25px;
+        }
+        .us-questions-list label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+        }
+        
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        /* --- DATE CHOICE --- */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .choice-card {
+            background: var(--bg-color);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .choice-card:hover { background: #FFF0EB; }
+        .choice-card.active {
+            border-color: var(--primary);
+            background-color: #FFF0EB;
+            color: var(--primary-dark);
+        }
+
+        .checkmark {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 12px;
+            display: none;
+        }
+        .choice-card.active .checkmark { display: block; }
+
+        /* --- QUIZ --- */
+        .quiz-item { margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px dashed #eee; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-label { font-weight: 500; margin-bottom: 8px; display: block; }
+        
+        .quiz-feedback {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            height: 20px;
+            font-weight: 600;
+        }
+        .correct { color: #4CAF50; }
+        .wrong { color: #FF6B6B; }
+
+        /* --- GAME --- */
+        #game-area {
+            width: 100%;
+            height: 300px;
+            background-color: #FFF5F8;
+            border: 2px dashed var(--primary);
+            border-radius: 12px;
+            position: relative;
+            overflow: hidden;
+            cursor: crosshair;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-heart {
+            position: absolute;
+            font-size: 24px;
+            cursor: pointer;
+            user-select: none;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+
+        .game-ui {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        /* --- GALLERY --- */
+        .gallery-slider {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            overflow: hidden;
+            border-radius: 12px;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            background-color: #eee;
+        }
+
+        .slide.active { opacity: 1; }
+        .slide img { width: 100%; height: 100%; object-fit: cover; }
+
+        .gallery-note {
+            font-size: 0.8rem;
+            color: #999;
+            text-align: center;
+            margin-top: 10px;
+            font-style: italic;
+        }
+
+        /* --- FINAL SECTION --- */
+        .final-summary {
+            background: #FAFAFA;
+            padding: 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid #eee;
+        }
+
+        /* --- TOAST --- */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 50px;
+            padding: 16px;
+            position: fixed;
+            z-index: 1000;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 1. MAIN HEADER -->
+        <header>
+            <h1>SOKK ISI AJAA YA CINTAA</h1>
+            <div class="subtitle">PENGEN TAU AJA INI MAH TEH</div>
+            <div class="subtitle" style="font-size: 0.9rem; margin-top:5px;">Jawab yang jujur yaa ANAKK KECIL</div>
+        </header>
+
+        <!-- 2. PERTANYAAN TENTANG AKU (WIZARD) -->
+        <section id="about-me-section">
+            <div class="section-title">Tentang Aku</div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="question-card">
+                <div class="question-text" id="wizard-question">Loading sayangg...</div>
+                <textarea id="wizard-input" rows="3" placeholder="Ketik jawaban kamu di sini..."></textarea>
+            </div>
+
+            <div class="wizard-controls">
+                <button class="btn btn-outline" id="prev-btn" onclick="prevStep()">Sebelumnya</button>
+                <button class="btn" id="next-btn" onclick="nextStep()">Selanjutnya</button>
+            </div>
+        </section>
+
+        <!-- 3. PERTANYAAN TENTANG KITA -->
+        <section id="about-us-section">
+            <div class="section-title">Tentang Kita</div>
+            <div class="us-questions-list" id="us-list-container">
+                <!-- Dinamis digenerate via JS -->
+            </div>
+        </section>
+
+        <!-- 4. PILIHAN KLIK -->
+        <section id="date-choice-section">
+            <div class="section-title">Pilih Salah Satu</div>
+            <div class="grid-cards" id="date-grid">
+                <!-- Cards generated via JS -->
+            </div>
+        </section>
+
+        <!-- 5. QUIZ TENTANG AKU -->
+        <section id="quiz-section">
+            <div class="section-title">Seberapa Kenal Kamu Sama Aku?</div>
+            <div id="quiz-container">
+                <!-- Quiz generated via JS -->
+            </div>
+        </section>
+
+        <!-- 6. MINI GAME -->
+        <section id="game-section">
+            <div class="section-title">Catch The Heart 🎮</div>
+            <div class="game-ui">
+                <span>Waktu: <span id="timer">15</span>s</span>
+                <span>Score: <span id="score">0</span></span>
+            </div>
+            <div id="game-area">
+                <div style="text-align: center; color: var(--text-light);">
+                    <p>Klik tombol Mulai</p>
+                    <p>Tangkap hati sebanyak mungkin!</p>
+                </div>
+            </div>
+            <button class="btn" id="start-game-btn" style="margin-top: 15px;">Mulai Game</button>
+        </section>
+
+        <!-- 7. GALLERY -->
+        <section id="gallery-section">
+            <div class="section-title">Galeri</div>
+            <div class="gallery-slider" id="gallery-slider">
+                <div class="slide active"><img src="poto1.jpeg" alt="Foto 1"></div>
+                <div class="slide"><img src="poto2.jpeg" alt="Foto 2"></div>
+                <div class="slide"><img src="poto3.jpeg" alt="Foto 3"></div>
+            </div>
+            <div class="gallery-note">Cukup replace file photo1, photo2, photo3 di folder images</div>
+        </section>
+
+        <!-- 8. FINAL SECTION -->
+        <section id="final-section">
+            <div class="section-title">Kirim Jawaban</div>
+            <p>Review jawabanmu sebelum kirim final!</p>
+            <div class="final-summary" id="summary-preview">
+                Ringkasan jawaban akan muncul di sini...
+            </div>
+            <button class="btn" onclick="sendFinalToWhatsapp()">Kirim Semua (Rekap) 📨</button>
+        </section>
+
+        <!-- 9. FINAL MESSAGE -->
+        <div id="success-message" class="hidden" style="text-align: center; padding: 40px 20px;">
+            <h2>Makasih udah isi semuanya 🤍</h2>
+            <p style="margin-top: 10px;">Jangan lupa chat aku biar makin akrab!</p>
+            <button class="btn" onclick="window.open('https://wa.me/628131649362', '_blank')" style="margin-top: 20px; width: auto; padding: 12px 40px;">Chat Aku</button>
+        </div>
+        
+        <div style="height: 50px;"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast">Pesan notifikasi</div>
+
+    <script>
+        /* --- DATA & STATE --- */
+        const state = {
+            aboutMe: {},
+            aboutUs: {},
+            dateChoice: null,
+            quizScore: 0,
+            gameScore: 0,
+            currentStep: 0
+        };
+
+        // --- NOMOR WA ANDA (GANTI INI) ---
+        const WA_NUMBER = "628131649362"; 
+
+        // --- DATA PERTANYAAN ---
+        const aboutMeQuestions = [
+            "Hal pertama yang kamu notice dari aku?",
+            "Menurut kamu kesan aku seperti apa?",
+            "Sifat aku yang paling kamu suka?",
+            "Hal random dari aku yang kamu suka apa?",
+            "Menurut kamu aku tipe orang seperti apa?",
+            "Kalau harus jelasin aku pakai 3 kata, apa aja?",
+            "Apa yang bikin kamu nyaman sama aku?",
+            "Menurut kamu hal yang paling beda dari aku apa?"
+        ];
+
+        const aboutUsQuestions = [
+            "Menurut kamu kita cocok dalam hal apa?",
+            "Hal yang paling pengen kamu lakuin bareng aku?",
+            "Tempat yang pengen kamu kunjungin sama aku?",
+            "Makanan yang pengen kamu makan bareng aku?",
+            "Date impian versi kamu?",
+            "Satu hal random yang pengen kamu coba sama aku?",
+            "Momen yang pengen kamu buat bareng aku?",
+            "Hal kecil yang pengen kita lakuin bersama?"
+        ];
+
+        const dateOptions = [
+            "movie date", "dinner date", "beach trip", 
+            "night drive", "random adventure", "coffee date", 
+            "staycation", "amusement park"
+        ];
+
+        const quizData = [
+            { q: "Warna favorit aku?", a: ["abu", "white", "putih", "hitam"] },
+            { q: "Makanan favorit aku?", a: ["nasi goreng", "mie", "ramen"] },
+            { q: "Minuman favorit aku?", a: ["kopi", "matcha", "teh", "cocacola"] },
+            { q: "Kebiasaan aku?", a: ["tidur", "main game", "ketawa"] },
+            { q: "Tempat impian?", a: ["jepang", "korea", "bali", "europa"] }
+        ];
+
+        /* --- INITIALIZATION --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            initWizard();
+            initAboutUs();
+            initDateChoice();
+            initQuiz();
+            startGallerySlider();
+            updateSummary();
+        });
+
+        /* --- FUNGSI KIRIM LANGSUNG KE WA --- */
+        function sendInstantWA(category, question, answer) {
+            if (!answer.trim()) {
+                showToast("Jawab dulu dong dong 🥺");
+                return;
+            }
+            
+            const msg = `*Jawaban Baru Masuk! 💌*\n\n*${category}*\nQ: ${question}\nA: ${answer}`;
+            const url = `https://wa.me/$628131649362?text=${encodeURIComponent(msg)}`;
+            
+            // Open WA in new tab
+            window.open(url, '_blank');
+        }
+
+        /* --- 1. WIZARD LOGIC (ABOUT ME) --- */
+        const questionEl = document.getElementById('wizard-question');
+        const inputEl = document.getElementById('wizard-input');
+        const progressBar = document.getElementById('progress-bar');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+
+        function initWizard() { renderStep(); }
+
+        function renderStep() {
+            const q = aboutMeQuestions[state.currentStep];
+            questionEl.textContent = q;
+            inputEl.value = state.aboutMe[q] || '';
+            
+            const progress = ((state.currentStep + 1) / aboutMeQuestions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            prevBtn.style.visibility = state.currentStep === 0 ? 'hidden' : 'visible';
+            nextBtn.textContent = state.currentStep === aboutMeQuestions.length - 1 ? 'Selesai' : 'Selanjutnya';
+        }
+
+        function nextStep() {
+            const currentQ = aboutMeQuestions[state.currentStep];
+            const answer = inputEl.value.trim();
+            
+            if(!answer) {
+                showToast("Jawab dulu dong dong 🥺");
+                return;
+            }
+
+            // Save state
+            state.aboutMe[currentQ] = answer;
+            
+            // KIRIM LANGSUNG KE WA SETIAP KLIK NEXT
+            sendInstantWA("Tentang Aku", currentQ, answer);
+
+            if (state.currentStep < aboutMeQuestions.length - 1) {
+                state.currentStep++;
+                questionEl.style.opacity = 0;
+                inputEl.style.opacity = 0;
+                setTimeout(() => {
+                    renderStep();
+                    questionEl.style.opacity = 1;
+                    inputEl.style.opacity = 1;
+                }, 200);
+            } else {
+                showToast("Yey! Section Tentang Aku selesai 🤍");
+                document.getElementById('about-us-section').scrollIntoView({ behavior: 'smooth' });
+                updateSummary();
+            }
+        }
+
+        function prevStep() {
+            if (state.currentStep > 0) {
+                const currentQ = aboutMeQuestions[state.currentStep];
+                state.aboutMe[currentQ] = inputEl.value.trim();
+                state.currentStep--;
+                renderStep();
+            }
+        }
+
+        /* --- 2. ABOUT US LOGIC (LANGSUNG KIRIM) --- */
+        function initAboutUs() {
+            const container = document.getElementById('us-list-container');
+            aboutUsQuestions.forEach((q, index) => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <label>${q}</label>
+                    <div class="input-group">
+                        <textarea class="us-input" rows="2" id="us-input-${index}" placeholder="Jawaban kamu..."></textarea>
+                        <button class="btn-send-mini" onclick="sendUsAnswer(${index}, '${q.replace(/'/g, "\\'")}')">Kirim</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function sendUsAnswer(index, question) {
+            const input = document.getElementById(`us-input-${index}`);
+            const answer = input.value.trim();
+            
+            if(!answer) {
+                showToast("Isi jawabannya dulu ya 🥺");
+                return;
+            }
+
+            // Save state
+            state.aboutUs[question] = answer;
+
+            // KIRIM LANGSUNG KE WA
+            sendInstantWA("Tentang Kita", question, answer);
+            
+            showToast("Jawaban terkirim ke WA! 📨");
+            updateSummary();
+        }
+
+        /* --- 3. DATE CHOICE LOGIC (LANGSUNG KIRIM) --- */
+        function initDateChoice() {
+            const grid = document.getElementById('date-grid');
+            dateOptions.forEach(opt => {
+                const card = document.createElement('div');
+                card.className = 'choice-card';
+                card.innerHTML = `
+                    ${opt.charAt(0).toUpperCase() + opt.slice(1)}
+                    <span class="checkmark">✔</span>
+                `;
+                card.onclick = () => {
+                    document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('active'));
+                    card.classList.add('active');
+                    state.dateChoice = opt;
+                    
+                    // KIRIM LANGSUNG KE WA SAAT DIPILIH
+                    sendInstantWA("Pilihan Date", "Kamu milih date:", opt);
+                    
+                    updateSummary();
+                };
+                grid.appendChild(card);
+            });
+        }
+
+        /* --- 4. QUIZ LOGIC --- */
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            quizData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'quiz-item';
+                div.innerHTML = `
+                    <span class="quiz-label">${item.q}</span>
+                    <input type="text" class="quiz-input" placeholder="Jawab..." oninput="checkQuiz(${index}, this.value)">
+                    <div class="quiz-feedback" id="feedback-${index}"></div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function checkQuiz(index, value) {
+            const feedbackEl = document.getElementById(`feedback-${index}`);
+            const correctAnswers = quizData[index].a;
+            const userVal = value.toLowerCase().trim();
+
+            if (userVal === '') {
+                feedbackEl.textContent = '';
+                return;
+            }
+
+            const isCorrect = correctAnswers.some(ans => userVal.includes(ans));
+
+            if (isCorrect) {
+                feedbackEl.textContent = "Okee kamu benerr 🤍";
+                feedbackEl.className = "quiz-feedback correct";
+            } else {
+                feedbackEl.textContent = "Salahh, masa gak tau 😌";
+                feedbackEl.className = "quiz-feedback wrong";
+            }
+            calculateQuizScore();
+            updateSummary();
+        }
+
+        function calculateQuizScore() {
+            let score = 0;
+            const inputs = document.querySelectorAll('.quiz-input');
+            inputs.forEach((input, idx) => {
+                const val = input.value.toLowerCase().trim();
+                const correctAnswers = quizData[idx].a;
+                if (correctAnswers.some(ans => val.includes(ans))) {
+                    score++;
+                }
+            });
+            state.quizScore = score;
+        }
+
+        /* --- 5. GAME LOGIC --- */
+        const gameArea = document.getElementById('game-area');
+        const startBtn = document.getElementById('start-game-btn');
+        const timerEl = document.getElementById('timer');
+        const scoreEl = document.getElementById('score');
+        
+        let gameTimer;
+        let spawnTimer;
+        let timeLeft = 15;
+        let isPlaying = false;
+
+        startBtn.addEventListener('click', startGame);
+
+        function startGame() {
+            if (isPlaying) return;
+            isPlaying = true;
+            state.gameScore = 0;
+            timeLeft = 15;
+            scoreEl.textContent = '0';
+            timerEl.textContent = timeLeft;
+            startBtn.disabled = true;
+            startBtn.textContent = "Sedang Main...";
+            gameArea.innerHTML = '';
+
+            gameTimer = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+
+            spawnHeart();
+            spawnTimer = setInterval(spawnHeart, 800);
+        }
+
+        function spawnHeart() {
+            if (!isPlaying) return;
+            const heart = document.createElement('div');
+            heart.classList.add('game-heart');
+            heart.textContent = '❤️';
+            const maxLeft = gameArea.clientWidth - 30;
+            const maxTop = gameArea.clientHeight - 30;
+            const left = Math.floor(Math.random() * maxLeft);
+            const top = Math.floor(Math.random() * maxTop);
+            heart.style.left = left + 'px';
+            heart.style.top = top + 'px';
+            heart.addEventListener('mousedown', catchHeart);
+            heart.addEventListener('touchstart', catchHeart);
+            gameArea.appendChild(heart);
+            setTimeout(() => { if(heart.parentNode) heart.remove(); }, 1500);
+        }
+
+        function catchHeart(e) {
+            e.preventDefault();
+            state.gameScore++;
+            scoreEl.textContent = state.gameScore;
+            this.remove();
+        }
+
+        function endGame() {
+            isPlaying = false;
+            clearInterval(gameTimer);
+            clearInterval(spawnTimer);
+            startBtn.disabled = false;
+            startBtn.textContent = "Main Lagi";
+            showToast(`Game Over! Score kamu: ${state.gameScore}`);
+            gameArea.innerHTML = `<div style="text-align:center; padding-top:100px;">
+                <h3>Score: ${state.gameScore}</h3>
+                <p>Coba lagi biar lebih tinggi!</p>
+            </div>`;
+            updateSummary();
+        }
+
+        /* --- 6. GALLERY SLIDER --- */
+        function startGallerySlider() {
+            const slides = document.querySelectorAll('.slide');
+            let currentSlide = 0;
+            setInterval(() => {
+                slides[currentSlide].classList.remove('active');
+                currentSlide = (currentSlide + 1) % slides.length;
+                slides[currentSlide].classList.add('active');
+            }, 4000);
+        }
+
+        /* --- 7. SUMMARY & WHATSAPP --- */
+        function updateSummary() {
+            const summaryEl = document.getElementById('summary-preview');
+            let html = `<strong>Status Pengisian:</strong><br><br>`;
+            const meCount = Object.keys(state.aboutMe).length;
+            const usCount = Object.keys(state.aboutUs).filter(k => state.aboutUs[k].trim() !== '').length;
+            
+            html += `✅ Tentang Aku: ${meCount}/${aboutMeQuestions.length}<br>`;
+            html += `✅ Tentang Kita: ${usCount}/${aboutUsQuestions.length}<br>`;
+            html += `✅ Pilihan Date: ${state.dateChoice || '-' }<br>`;
+            html += `✅ Quiz Score: ${state.quizScore}/${quizData.length}<br>`;
+            html += `✅ Game Score: ${state.gameScore}<br>`;
+            summaryEl.innerHTML = html;
+        }
+
+        function sendFinalToWhatsapp() {
+            const name = document.getElementById('user-name') ? document.getElementById('user-name').value.trim() : "Tanpa Nama";
+            let msg = `*Rekap Lengkap Website!* 🤍\n\n`;
+            msg += `Nama: ${name}\n\n`;
+            
+            msg += `*Tentang Aku:*\n`;
+            for (let q of aboutMeQuestions) {
+                msg += `• ${q}: ${state.aboutMe[q] || '-'}\n`;
+            }
+            
+            msg += `\n*Tentang Kita:*\n`;
+            for (let q of aboutUsQuestions) {
+                msg += `• ${q}: ${state.aboutUs[q] || '-'}\n`;
+            }
+
+            msg += `\n*Pilihan Date:* ${state.dateChoice || 'Tidak memilih'}\n`;
+            msg += `*Quiz Score:* ${state.quizScore}/${quizData.length}\n`;
+            msg += `*Game Score:* ${state.gameScore}\n`;
+            
+            const encodedMsg = encodeURIComponent(msg);
+            const url = `https://wa.me/628131649362?text=${encodedMsg}`;
+            
+            document.getElementById('final-section').classList.add('hidden');
+            document.getElementById('success-message').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => { window.open(url, '_blank'); }, 1500);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            toast.textContent = message;
+            toast.className = "show";
+            setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+    </script>
+</body>
+</html>
